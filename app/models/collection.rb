@@ -10,7 +10,7 @@ class Collection < ApplicationRecord
   def generate_prediction
     collection = Collection.last
     weight = 0.0
-    Register.all.each do |register|
+    Register.where(created_at: [Collection.last.created_at..Time.now]).each do |register|
       weight += register.weight
     end
     time = Date.today - collection.created_at.to_date
@@ -30,7 +30,7 @@ class Collection < ApplicationRecord
     @liquido_inorganico = 0.0
     @liquido_inflamavel = 0.0
     @outros  = 0.0
-    Register.all.each do |register|
+    Register.where(created_at: [Collection.last.created_at..Time.now]).each do |register|
       residue = Residue.find_by(id: register.residue_id)
       case residue.kind
       when "Sólido Orgânico"
